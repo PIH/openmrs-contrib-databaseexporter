@@ -73,7 +73,7 @@ public class Configuration {
 	public String toString() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(this);
+			return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
 		}
 		catch (Exception e) {
 			return super.toString();

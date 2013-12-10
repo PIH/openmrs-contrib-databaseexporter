@@ -23,6 +23,7 @@ import org.openmrs.contrib.databaseexporter.Configuration;
 import org.openmrs.contrib.databaseexporter.TableRow;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -323,6 +324,10 @@ public class Util {
 
 		}
 		return mainNode;
+	}
+
+	public static void writeConfiguration(Configuration config, File outputFile) throws IOException {
+		FileUtils.writeStringToFile(outputFile, config.toString(), "UTF-8");
 	}
 }
 
