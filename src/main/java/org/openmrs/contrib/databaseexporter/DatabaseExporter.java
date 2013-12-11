@@ -63,7 +63,29 @@ public class DatabaseExporter {
 			}
 		}
 
-		Configuration config = Util.loadConfiguration(resourceNames);
+		// Enable users to not specify long absolute paths, if the specify a configDir argument
+		List<String> convertedResourceNames = new ArrayList<String>();
+		String configDir = overrides.get("configDir");
+		for (String resourceName : resourceNames) {
+			String convertedName = resourceName;
+			if (configDir != null) {
+				String contents = Util.loadFromFile(resourceName);
+				if (contents == null) {
+					String newName = configDir;
+					if (!newName.endsWith(System.getProperty("file.separator"))) {
+						newName += System.getProperty("file.separator");
+					}
+					newName += resourceName;
+					contents = Util.loadFromFile(newName);
+					if (contents != null) {
+						convertedName = newName;
+					}
+				}
+			}
+			convertedResourceNames.add(convertedName);
+		}
+
+		Configuration config = Util.loadConfiguration(convertedResourceNames);
 
 		for (String key : overrides.keySet()) {
 			String val = overrides.get(key);
@@ -84,6 +106,9 @@ public class DatabaseExporter {
 			}
 			else if (key.equals("logSql")) {
 				config.setLogSql("true".equals(val));
+			}
+			else if (key.equals("configDir")) {
+				// Do nothing here
 			}
 			else {
 				throw new RuntimeException("Unable to set property <" + key + "> outside of configuration files.");

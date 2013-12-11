@@ -107,13 +107,19 @@ public class Util {
 		return df.format(d);
 	}
 
-	public static String loadResource(String path) {
-		// First try to load from file
-		String contents = null;
+	public static String loadFromFile(String path) {
+		String ret = null;
 		try {
-			contents = FileUtils.readFileToString(new File(path), "UTF-8");
+			ret = FileUtils.readFileToString(new File(path), "UTF-8");
 		}
 		catch (Exception e) {}
+		return ret;
+	}
+
+	public static String loadResource(String path) {
+
+		// First try to load from file
+		String contents = loadFromFile(path);
 
 		// If that didn't work, try loading from classpath
 		if (contents == null) {
