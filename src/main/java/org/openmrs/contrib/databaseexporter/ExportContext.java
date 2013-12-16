@@ -138,20 +138,30 @@ public class ExportContext {
 			}
 
 			toInsert.removeAll(executeIdQuery("select id from " + tempTableName));
+			toInsert.remove(null);
 
 			if (!toInsert.isEmpty()) {
 				log("Adding " + toInsert.size() + " values to " + tempTableName);
-				StringBuilder insert = new StringBuilder("insert into " + tempTableName + " (id) values ");
+
+				StringBuilder insert = null;
+				int count = 0;
 				for (Iterator<Integer> i = toInsert.iterator(); i.hasNext();) {
 					Integer id = i.next();
-					if (id != null) {
-						insert.append("(").append(id).append(")");
-						if (i.hasNext()) {
-							insert.append(",");
-						}
+					if (insert == null) {
+						insert = new StringBuilder("insert into " + tempTableName + " (id) values ");
+					}
+					count++;
+					insert.append("(").append(id).append(")");
+					if (!i.hasNext() || count == 10000) {
+						executeUpdate(insert.toString());
+						log("inserted " + count + " values to " + tempTableName);
+						insert = null;
+						count = 0;
+					}
+					else {
+						insert.append(",");
 					}
 				}
-				executeUpdate(insert.toString());
 			}
 		}
 	}
