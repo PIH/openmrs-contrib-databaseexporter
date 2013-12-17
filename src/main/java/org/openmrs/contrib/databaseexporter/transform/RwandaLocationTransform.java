@@ -73,9 +73,9 @@ public class RwandaLocationTransform extends LocationTransform {
 				ret.add(tr);
 			}
 
-			StringBuilder rwLocCodes = new StringBuilder();
-			StringBuilder sitesToList = new StringBuilder();
-			StringBuilder sitesToTally = new StringBuilder();
+			StringBuilder rwLocCodes = new StringBuilder("");
+			StringBuilder sitesToList = new StringBuilder("");
+			StringBuilder sitesToTally = new StringBuilder("");
 
 			int num=100;
 			for (Iterator<String> i = getUsedNames().iterator(); i.hasNext();) {
